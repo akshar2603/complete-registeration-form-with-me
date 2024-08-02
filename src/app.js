@@ -4,6 +4,7 @@ const express = require('express');
 const app = express(); 
 const hbs = require('hbs') ;
 const Register = require('./models/register') ;
+const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken') ;
  require('dotenv').config() ; 
 
@@ -21,6 +22,7 @@ app.set("view engine", "hbs"    ) ; // here we have use view engine  but for use
 app.set("views" , temp_path) ;
 app.use(express.static(static_path))
 app.use(express.json());
+app.use(cookieParser());
 // that we have to require because sending data from html
 
 app.use(express.urlencoded({extended:false}));
@@ -38,6 +40,14 @@ app.post('/register', async(req, res) => {
     const token = await reg.generateAuthToken() ;
     console.log(token) ;
 
+    // storing token in cookies 
+
+    res.cookie("just", token , {
+        expires: new Date(date.now()+ 300000) , // here 30000 is seconds 
+        httpOnly:true  // client side valu cookie ni kai sali j no kari ake 
+    }) ; 
+    console.log(cookie); 
+
     const registered = await reg.save(); 
     res.status(201).render('index'); 
 
@@ -48,8 +58,27 @@ app.post('/register', async(req, res) => {
     }
 })
 app.get('/', async (req,res) => {
-    await res.render("index") ;
-    // res.send(result) ;
+    
+    try{
+
+        const cookie = req.cookies;
+
+        console.log(cookie)
+
+        if(Object.keys(cookie).length != 0){
+            res.render('index')
+        } else {
+            res.render('login')
+        }
+
+
+    } catch(error){
+        console.log(error)
+    }
+
+
+    
+
 }) ;
 app.get('/register', async (req,res) =>{
    
@@ -74,10 +103,9 @@ app.post('/login', async(req,res) =>{
         const token = await useremail.generateAuthToken() ;
         console.log(token) ;
         if(isMatch){
-            res.send("login successful") ;
-            console.log("login successful") ;
+            res.cookie('auth-token', token).render('index')
         }
-        else res.render('index') ;
+        else res.render('login') ;
 
 
         }
