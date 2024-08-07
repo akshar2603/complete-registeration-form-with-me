@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="../css/index.css">
-  <title>akshar's Login Page</title>
+<link rel="stylesheet" href="../css/index.css">
+<title>akshar's Login Page</title>
 </head>
 <body>
-    <section>
-        <div class="form-box">
+   {{>navbar}}
+
+    <section>     <div class="form-box">
             <div class="form-value">
                 <form action="./login" method="post">
                     <h2>Login</h2>
@@ -21,13 +22,11 @@
                         <label for="">Password</label>
                     </div>
                     <div class="forget">
-                        <label for=""><input type="checkbox">Remember Me  <a href="#">Forget Password</a></label>
-                      
-                    </div>
-                    <button type="submit">Log in</button>
-                    <div class="register">
-                        <p>Don't have a account <a href="/register">Register</a></p>
-                    </div>
+                        <label for=""><input type="checkbox">Remember Me <a href="#">Forget Password</a></label>
+                        
+                        </div>
+                        <button type="submit">Log in</button>
+                        
                 </form>
             </div>
         </div>
